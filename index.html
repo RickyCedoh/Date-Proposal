@@ -1,0 +1,374 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>A Special Question ✨</title>
+    <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@400;700&family=Poppins:wght@300;400;500;600&display=swap" rel="stylesheet">
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        html, body {
+            width: 100%;
+            height: 100%;
+            overflow-x: hidden;
+        }
+
+        body {
+            font-family: 'Poppins', sans-serif;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            padding: 20px;
+            position: relative;
+            min-height: 100vh;
+        }
+
+        /* Animated background stars */
+        .stars {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            pointer-events: none;
+            z-index: 1;
+        }
+
+        .star {
+            position: absolute;
+            width: 2px;
+            height: 2px;
+            background: white;
+            border-radius: 50%;
+            opacity: 0;
+            animation: twinkle 3s infinite;
+        }
+
+        @keyframes twinkle {
+            0%, 100% { opacity: 0.2; transform: scale(1); }
+            50% { opacity: 1; transform: scale(1.5); }
+        }
+
+        /* Main container */
+        .container {
+            position: relative;
+            z-index: 10;
+            width: 100%;
+            max-width: 600px;
+        }
+
+        .card {
+            background: white;
+            border-radius: 25px;
+            padding: 50px 40px;
+            box-shadow: 0 20px 60px rgba(0, 0, 0, 0.3);
+            text-align: center;
+            animation: slideIn 0.8s ease-out;
+        }
+
+        @keyframes slideIn {
+            from {
+                opacity: 0;
+                transform: translateY(50px);
+            }
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+
+        h1 {
+            font-family: 'Playfair Display', serif;
+            font-size: 2.8em;
+            color: #667eea;
+            margin-bottom: 25px;
+            font-weight: 700;
+        }
+
+        .emoji {
+            display: inline-block;
+            animation: heartbeat 1.5s ease-in-out infinite;
+            font-size: 1.2em;
+        }
+
+        @keyframes heartbeat {
+            0%, 100% { transform: scale(1); }
+            25% { transform: scale(1.3); }
+            50% { transform: scale(1); }
+        }
+
+        .message {
+            font-size: 1.2em;
+            color: #444;
+            line-height: 1.8;
+            margin-bottom: 30px;
+        }
+
+        .question {
+            font-size: 1.6em;
+            font-weight: 600;
+            color: #764ba2;
+            margin: 35px 0;
+        }
+
+        .buttons {
+            display: flex;
+            gap: 20px;
+            justify-content: center;
+            margin-top: 40px;
+            flex-wrap: wrap;
+        }
+
+        button {
+            padding: 18px 40px;
+            font-size: 1.2em;
+            border: none;
+            border-radius: 50px;
+            cursor: pointer;
+            font-family: 'Poppins', sans-serif;
+            font-weight: 500;
+            transition: all 0.3s ease;
+            outline: none;
+        }
+
+        .btn-yes {
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            color: white;
+            box-shadow: 0 8px 25px rgba(102, 126, 234, 0.4);
+        }
+
+        .btn-yes:hover {
+            transform: translateY(-3px);
+            box-shadow: 0 12px 35px rgba(102, 126, 234, 0.6);
+        }
+
+        .btn-yes:active {
+            transform: translateY(-1px);
+        }
+
+        .btn-no {
+            background: #f0f0f0;
+            color: #666;
+        }
+
+        .btn-no:hover {
+            background: #e0e0e0;
+        }
+
+        /* Celebration overlay */
+        .celebration {
+            display: none;
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: rgba(0, 0, 0, 0.95);
+            z-index: 1000;
+            align-items: center;
+            justify-content: center;
+            animation: fadeIn 0.5s ease-out;
+        }
+
+        .celebration.show {
+            display: flex;
+        }
+
+        @keyframes fadeIn {
+            from { opacity: 0; }
+            to { opacity: 1; }
+        }
+
+        .celebration-content {
+            text-align: center;
+            color: white;
+            padding: 40px;
+            animation: popIn 0.6s cubic-bezier(0.68, -0.55, 0.265, 1.55);
+        }
+
+        @keyframes popIn {
+            0% {
+                transform: scale(0.3);
+                opacity: 0;
+            }
+            100% {
+                transform: scale(1);
+                opacity: 1;
+            }
+        }
+
+        .celebration-content h2 {
+            font-family: 'Playfair Display', serif;
+            font-size: 4em;
+            margin-bottom: 20px;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+            text-fill-color: transparent;
+        }
+
+        .celebration-content p {
+            font-size: 1.5em;
+            line-height: 1.8;
+            margin: 15px 0;
+        }
+
+        /* Confetti */
+        .confetti-piece {
+            position: fixed;
+            width: 10px;
+            height: 10px;
+            opacity: 0;
+            pointer-events: none;
+        }
+
+        @keyframes confetti-fall {
+            0% {
+                opacity: 1;
+                transform: translateY(-100px) rotate(0deg);
+            }
+            100% {
+                opacity: 0;
+                transform: translateY(100vh) rotate(720deg);
+            }
+        }
+
+        /* Mobile responsive */
+        @media (max-width: 600px) {
+            .card {
+                padding: 40px 25px;
+            }
+            
+            h1 {
+                font-size: 2.2em;
+            }
+            
+            .message {
+                font-size: 1.1em;
+            }
+            
+            .question {
+                font-size: 1.4em;
+            }
+            
+            button {
+                padding: 15px 30px;
+                font-size: 1.1em;
+            }
+            
+            .celebration-content h2 {
+                font-size: 2.5em;
+            }
+            
+            .celebration-content p {
+                font-size: 1.2em;
+            }
+        }
+    </style>
+</head>
+<body>
+    <!-- Stars background -->
+    <div class="stars" id="starsContainer"></div>
+    
+    <!-- Main content -->
+    <div class="container">
+        <div class="card">
+            <h1>Hey You! <span class="emoji">💕</span></h1>
+            <div class="message">
+                I've been thinking about this for a while, and I couldn't find a better way to ask you than creating something special just for you.
+                <br><br>
+                Every moment with you feels like magic, and I want to create more of those moments together.
+            </div>
+            <div class="question">
+                Would you go on a date with me?
+            </div>
+            <div class="buttons">
+                <button class="btn-yes" onclick="sayYes()">Yes! I'd love to! ✨</button>
+                <button class="btn-no" id="noButton" onmouseover="runAway()" onclick="runAway()">Maybe not...</button>
+            </div>
+        </div>
+    </div>
+
+    <!-- Celebration screen -->
+    <div class="celebration" id="celebrationScreen">
+        <div class="celebration-content">
+            <h2>YES! 🎉</h2>
+            <p>You just made me the happiest person! <span class="emoji">❤️</span></p>
+            <p>I can't wait for our date!</p>
+            <p style="margin-top: 30px; font-size: 1.2em;">I'll reach out soon with the details! 💫</p>
+        </div>
+    </div>
+
+    <script>
+        // Create stars on page load
+        function createStars() {
+            var starsContainer = document.getElementById('starsContainer');
+            var starCount = 100;
+            
+            for (var i = 0; i < starCount; i++) {
+                var star = document.createElement('div');
+                star.className = 'star';
+                star.style.left = Math.random() * 100 + '%';
+                star.style.top = Math.random() * 100 + '%';
+                star.style.animationDelay = Math.random() * 3 + 's';
+                starsContainer.appendChild(star);
+            }
+        }
+
+        // Call on page load
+        window.addEventListener('load', createStars);
+
+        // Yes button - show celebration
+        function sayYes() {
+            var celebration = document.getElementById('celebrationScreen');
+            celebration.className = 'celebration show';
+            createConfetti();
+        }
+
+        // No button - runs away
+        function runAway() {
+            var noButton = document.getElementById('noButton');
+            var maxX = window.innerWidth - noButton.offsetWidth - 40;
+            var maxY = window.innerHeight - noButton.offsetHeight - 40;
+            
+            var randomX = Math.floor(Math.random() * maxX);
+            var randomY = Math.floor(Math.random() * maxY);
+            
+            noButton.style.position = 'fixed';
+            noButton.style.left = randomX + 'px';
+            noButton.style.top = randomY + 'px';
+            noButton.style.transition = 'all 0.3s ease';
+        }
+
+        // Create confetti animation
+        function createConfetti() {
+            var colors = ['#667eea', '#764ba2', '#f093fb', '#4facfe', '#43e97b', '#ff6b9d'];
+            var confettiCount = 150;
+            
+            for (var i = 0; i < confettiCount; i++) {
+                setTimeout(function() {
+                    var confetti = document.createElement('div');
+                    confetti.className = 'confetti-piece';
+                    confetti.style.left = Math.random() * 100 + '%';
+                    confetti.style.top = '-20px';
+                    confetti.style.backgroundColor = colors[Math.floor(Math.random() * colors.length)];
+                    confetti.style.animation = 'confetti-fall ' + (2 + Math.random() * 2) + 's linear forwards';
+                    confetti.style.animationDelay = Math.random() + 's';
+                    document.body.appendChild(confetti);
+                    
+                    setTimeout(function() {
+                        confetti.remove();
+                    }, 4000);
+                }, i * 20);
+            }
+        }
+    </script>
+</body>
+</html>
